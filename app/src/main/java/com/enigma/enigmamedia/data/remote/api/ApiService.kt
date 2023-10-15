@@ -1,19 +1,14 @@
 package com.enigma.enigmamedia.data.remote.api
 
-import android.adservices.adid.AdId
-import com.enigma.enigmamedia.data.model.LoginRequest
-import com.enigma.enigmamedia.data.model.RegisterRequest
 import com.enigma.enigmamedia.data.remote.response.LoginResponse
-import com.enigma.enigmamedia.data.remote.response.LoginResult
 import com.enigma.enigmamedia.data.remote.response.RegisterResponse
+import com.enigma.enigmamedia.data.remote.response.StoryResponse
 import retrofit2.Call
-import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface ApiService {
 
@@ -34,6 +29,10 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String,
 
-    ): Call<RegisterResponse>
+        ): Call<RegisterResponse>
 
+    @GET("stories")
+    suspend fun getStories(
+        @Header("Authorization") token: String
+    ): StoryResponse
 }
