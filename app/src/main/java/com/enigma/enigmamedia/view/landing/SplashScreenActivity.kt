@@ -1,16 +1,23 @@
 package com.enigma.enigmamedia.view.landing
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.lifecycle.lifecycleScope
 import com.enigma.enigmamedia.databinding.ActivitySplashScreenBinding
+import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.view.main.MainActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var splashScreenBinding: ActivitySplashScreenBinding
+
+    private val tokenPreferences by lazy { TokenPreferences(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,23 +32,27 @@ class SplashScreenActivity : AppCompatActivity() {
             ivSplash.animate().alpha(1f).setDuration(2000).start()
             Handler().postDelayed({
 
-                val sharedPreferences = getSharedPreferences("Session", Context.MODE_PRIVATE)
 
 //                Check Data Sesi dan Token
-                val userId = sharedPreferences.getString("userId", null)
-                val token = sharedPreferences.getString("token", null)
 
-                if (userId != null && token != null) {
-                    startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
-                    finish()
-                } else {
-                    startActivity(Intent(this@SplashScreenActivity, LandingScreenActivity::class.java))
+
+                lifecycleScope.launch {
+                    val token = tokenPreferences.getToken().first()
+                    if (token.isNotEmpty()) {
+                        startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
+                    } else {
+                        startActivity(
+                            Intent(
+                                this@SplashScreenActivity,
+                                LandingScreenActivity::class.java
+                            )
+                        )
+                    }
                     finish()
                 }
 
 
-
-            }, 2000)
+            }, 1000)
         }
 
     }

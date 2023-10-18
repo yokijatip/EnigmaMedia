@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+    id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -10,7 +13,7 @@ android {
     defaultConfig {
         applicationId = "com.enigma.enigmamedia"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
 
@@ -40,9 +43,17 @@ android {
 }
 
 dependencies {
+
+    val room_version = "2.5.2"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
 //    Coroutine
     val coroutineVersion = "1.3.9"
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
 
 //    Retrofit & GSON Converter
     val retrofitVersion = "2.9.0"
@@ -57,10 +68,17 @@ dependencies {
     val activityKtxVersion = "1.7.2"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelVersion")
     implementation("androidx.activity:activity-ktx:$activityKtxVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$viewModelVersion")
 
 //    Data Store
     val dataStoreVersion = "1.0.0"
     implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
+
+//    Glide
+    val glideVersion = "4.16.0"
+    implementation("com.github.bumptech.glide:glide:$glideVersion")
+
+
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

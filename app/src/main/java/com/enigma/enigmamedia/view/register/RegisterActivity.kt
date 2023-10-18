@@ -1,22 +1,19 @@
 package com.enigma.enigmamedia.view.register
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import com.enigma.enigmamedia.R
-import com.enigma.enigmamedia.data.remote.api.ApiService
 import com.enigma.enigmamedia.data.remote.client.Client
 import com.enigma.enigmamedia.data.remote.response.RegisterResponse
 import com.enigma.enigmamedia.databinding.ActivityRegisterBinding
 import com.enigma.enigmamedia.view.login.LoginActivity
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -26,9 +23,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(registerBinding.root)
-
-
-        val apiService = Client.getApiService()
 
         registerBinding.apply {
             tvLogin.setOnClickListener {
@@ -53,13 +47,17 @@ class RegisterActivity : AppCompatActivity() {
                 val email = edtEmail.text.toString().trim()
                 val password = edtPassword.text.toString().trim()
 
-                if (name.isNullOrEmpty() || email.isNullOrEmpty() || password.isNullOrEmpty()) {
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     toast("Form Harus di Isi Semua")
                 } else if (password.length < 8) {
                     toast("Password Harus lebih dari 9")
                 } else {
-                    register(name, email, password)
-                    finish()
+
+                    showLoading(true)
+                    Handler().postDelayed({
+                        register(name, email, password)
+                    },1000)
+
                 }
 
             }
@@ -73,29 +71,34 @@ class RegisterActivity : AppCompatActivity() {
 
     //    Fungsi Menangani Register
     private fun register(name: String, email: String, password: String) {
-        val call = apiService.register(name, email, password)
-        call.enqueue(object : Callback<RegisterResponse> {
+        apiService.register(name, email, password).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>,
                 response: Response<RegisterResponse>
             ) {
                 if (response.isSuccessful) {
-                    val message = response.body()?.message
+                    Toast.makeText(this@RegisterActivity, "Silahkan Login😁👍", Toast.LENGTH_SHORT).show()
+                    showLoading(false)
                     startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                    finish()
                 } else {
                     Toast.makeText(
                         this@RegisterActivity,
                         "Gagal Membuat Account",
                         Toast.LENGTH_SHORT
                     ).show()
+                    showLoading(false)
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 Toast.makeText(this@RegisterActivity, "Error", Toast.LENGTH_SHORT).show()
+                showLoading(false)
             }
         })
+    }
+
+    private fun showLoading(state: Boolean) {
+        registerBinding.loadingRegister.visibility = if (state) View.VISIBLE else View.GONE
     }
 
     //    Fungsi Toast

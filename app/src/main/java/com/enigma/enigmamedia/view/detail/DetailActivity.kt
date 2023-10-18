@@ -15,6 +15,5 @@ class DetailActivity : AppCompatActivity() {
         setContentView(detailBinding.root)
 
 
-
     }
 }

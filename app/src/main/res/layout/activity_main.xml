@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/montserrat_bold"
-        tools:text="Yoki Jati Perkasa"
+        android:text="Maaf Jelek"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -96,6 +96,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ProgressBar
+        android:id="@+id/loading_main"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"

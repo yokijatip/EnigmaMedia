@@ -15,11 +15,12 @@
             android:id="@+id/iv_avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/avatar2"
+            tools:src="@drawable/avatar2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -29,27 +30,19 @@
             app:layout_constraintTop_toTopOf="@+id/iv_avatar"
             tools:text="Yoki Jati Perkasa" />
 
-        <com.google.android.material.card.MaterialCardView
+        <ImageView
+            android:id="@+id/iv_photo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_height="300dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            app:cardCornerRadius="8dp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_avatar">
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+            tools:src="@drawable/jihyo" />
 
-            <ImageView
-                android:id="@+id/iv_photo"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
 
-                android:scaleType="centerCrop"
-                tools:src="@drawable/jihyo" />
-        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
