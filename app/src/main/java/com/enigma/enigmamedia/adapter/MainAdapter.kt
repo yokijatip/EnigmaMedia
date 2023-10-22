@@ -1,8 +1,11 @@
 package com.enigma.enigmamedia.adapter
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,9 +13,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.enigma.enigmamedia.R
 import com.enigma.enigmamedia.data.remote.response.ListStoryItem
-import com.enigma.enigmamedia.data.remote.response.StoryResponse
-import com.enigma.enigmamedia.databinding.ActivityAddBinding
 import com.enigma.enigmamedia.databinding.ItemMainBinding
+import com.enigma.enigmamedia.view.detail.DetailActivity
 
 class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(StoryDiffCallback()) {
 
@@ -23,7 +25,8 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
         this.onItemClickCallback = onItemClickCallback
     }
 
-    @SuppressLint("NotifyDataSerChanged", "NotifyDataSetChanged")
+
+    @SuppressLint("NotifyDataSetChanged")
     fun setList(newList: List<ListStoryItem>) {
         list.clear()
         list.addAll(newList)
@@ -33,7 +36,7 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
     inner class MainViewHolder(private val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun getRandomAvatar(): Int {
+        private fun getRandomAvatar(): Int {
             val avatarResourceDrawable = arrayOf(
                 R.drawable.avatar1,
                 R.drawable.avatar2,
@@ -41,7 +44,7 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
                 R.drawable.avatar4
             )
 
-            val randomIndex = (0 until avatarResourceDrawable.size).random()
+            val randomIndex = (avatarResourceDrawable.indices).random()
             return avatarResourceDrawable[randomIndex]
         }
 

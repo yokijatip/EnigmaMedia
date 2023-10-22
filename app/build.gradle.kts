@@ -22,7 +22,9 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
+
 
     buildTypes {
         release {
@@ -43,6 +45,18 @@ android {
 }
 
 dependencies {
+
+//    Compress Image
+//    implementation("id.zelory:compressor:3.0.0")
+
+    implementation("id.zelory:compressor:3.0.1")
+
+
+//    Camera X
+    val cameraxVersion = "1.2.3"
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
 
     val room_version = "2.5.2"
     implementation("androidx.room:room-runtime:$room_version")

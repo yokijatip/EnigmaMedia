@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.enigma.enigmamedia.R
 import com.enigma.enigmamedia.adapter.MainAdapter
+import com.enigma.enigmamedia.data.remote.response.ListStoryItem
 import com.enigma.enigmamedia.databinding.ActivityMainBinding
 import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.view.add.AddActivity
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
 //        Observer Live data dari ViewModel
         mainViewModel.getStoryListLiveData()
-            .observe(this, { stories -> mainAdapter.setList(stories) })
+            .observe(this) { stories -> mainAdapter.setList(stories) }
 
 //        Fetch Story
 
@@ -82,6 +83,12 @@ class MainActivity : AppCompatActivity() {
         floatingActionButtonAdd()
 
 
+//        Handler Buat On Item click buat ke Detail
+        mainAdapter.setOnItemClickCallback(object : MainAdapter.OnItemClickCallback {
+            override fun onItemClicked(storyItem: ListStoryItem) {
+                navigateToStoryDetail(storyItem)
+            }
+        })
     }
 
     //    Open Function untuk Toast Meesage
@@ -89,24 +96,27 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, pesan, Toast.LENGTH_SHORT).show()
     }
 
-    fun floatingActionButtonAdd() {
+    private fun floatingActionButtonAdd() {
         mainBinding.apply {
             fabAdd.setOnClickListener {
-                toast("Oke Sudah Masuk Ke Add")
                 startActivity(Intent(this@MainActivity, AddActivity::class.java))
             }
         }
     }
 
-    suspend fun getToken() {
+    private suspend fun getToken() {
         val token = tokenPreferences.getToken().first()
         mainViewModel.getAllStory(token)
     }
 
 
     //    Untuk mengarahkan ke Detail Story
-    private fun navigateToStoryDetail() {
-        startActivity(Intent(this@MainActivity, DetailActivity::class.java))
+    private fun navigateToStoryDetail(storyItem: ListStoryItem) {
+
+        val intent = Intent(this@MainActivity, DetailActivity::class.java).apply {
+            putExtra(DetailActivity.EXTRA_ID, storyItem.id)
+        }
+        startActivity(intent)
     }
 
     //    Fungsi Show Loading

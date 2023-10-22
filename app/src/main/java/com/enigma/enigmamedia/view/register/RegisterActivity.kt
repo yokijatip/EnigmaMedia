@@ -15,6 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@Suppress("DEPRECATION")
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var registerBinding: ActivityRegisterBinding
@@ -52,19 +53,13 @@ class RegisterActivity : AppCompatActivity() {
                 } else if (password.length < 8) {
                     toast("Password Harus lebih dari 9")
                 } else {
-
                     showLoading(true)
                     Handler().postDelayed({
                         register(name, email, password)
                     },1000)
-
                 }
-
             }
-
-//
         }
-
     }
 
     private val apiService = Client.getApiService()
@@ -77,7 +72,8 @@ class RegisterActivity : AppCompatActivity() {
                 response: Response<RegisterResponse>
             ) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@RegisterActivity, "Silahkan Login😁👍", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "Silahkan Login😁👍", Toast.LENGTH_SHORT)
+                        .show()
                     showLoading(false)
                     startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                 } else {

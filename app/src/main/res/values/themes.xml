@@ -7,7 +7,13 @@
         <item name="colorPrimaryDark">@color/darkPrimaryColor</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorAccent">@color/accentColor</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/explode</item>
+        <item name="android:windowExitTransition">@android:transition/explode</item>
     </style>
+
+
 
     <style name="Theme.EnigmaMedia" parent="Base.Theme.EnigmaMedia" />
 </resources>
