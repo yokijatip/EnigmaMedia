@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
+            android:transitionName="name"
             android:fontFamily="@font/montserrat_bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
@@ -42,6 +43,7 @@
 
             <ImageView
                 android:id="@+id/iv_photo"
+                android:transitionName="photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"

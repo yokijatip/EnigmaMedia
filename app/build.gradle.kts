@@ -48,9 +48,10 @@ dependencies {
 
 //    Compress Image
 //    implementation("id.zelory:compressor:3.0.0")
-
     implementation("id.zelory:compressor:3.0.1")
 
+//    Paging 3
+    implementation("androidx.paging:paging-runtime-ktx:3.1.0")
 
 //    Camera X
     val cameraxVersion = "1.2.3"

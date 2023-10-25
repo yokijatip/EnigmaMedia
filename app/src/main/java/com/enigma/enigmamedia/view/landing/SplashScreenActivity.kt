@@ -1,15 +1,14 @@
 package com.enigma.enigmamedia.view.landing
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.enigma.enigmamedia.databinding.ActivitySplashScreenBinding
 import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.view.main.MainActivity
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
@@ -52,7 +51,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 }
 
 
-            }, 1000)
+            }, 3000)
         }
 
     }

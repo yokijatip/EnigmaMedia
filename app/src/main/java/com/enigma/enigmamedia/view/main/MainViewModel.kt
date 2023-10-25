@@ -1,6 +1,5 @@
 package com.enigma.enigmamedia.view.main
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -35,7 +34,7 @@ class MainViewModel : ViewModel() {
                 ) {
                     if (response.isSuccessful) {
                         val stories = response.body()?.listStory
-                        storyListLiveData.value = stories
+                        storyListLiveData.value = stories!!
                     }
                 }
 

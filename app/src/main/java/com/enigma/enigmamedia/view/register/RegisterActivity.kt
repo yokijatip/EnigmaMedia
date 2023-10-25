@@ -32,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
 //            Logic Password kalo kurang dari 8
-            edtPassword.doOnTextChanged { text, start, before, count ->
+            edtPassword.doOnTextChanged { text, _, _, _ ->
 
                 if (text!!.length < 8) {
                     edtPasswordLayout.error = "Harus 8 Karakter"
