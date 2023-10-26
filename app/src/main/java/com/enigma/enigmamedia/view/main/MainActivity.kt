@@ -5,20 +5,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.enigma.enigmamedia.R
-import com.enigma.enigmamedia.adapter.MainAdapter
+import com.enigma.enigmamedia.adapter.MainAdapterMVVM
 import com.enigma.enigmamedia.data.remote.response.ListStoryItem
 import com.enigma.enigmamedia.databinding.ActivityMainBinding
 import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.view.add.AddActivity
 import com.enigma.enigmamedia.view.detail.DetailActivity
 import com.enigma.enigmamedia.view.landing.LandingScreenActivity
+import com.enigma.enigmamedia.viewmodel.main.MainViewModelMVVM
+import com.enigma.enigmamedia.viewmodel.main.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,8 +28,12 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
-    private val mainViewModel: MainViewModel by viewModels()
-    private val mainAdapter = MainAdapter()
+
+    private val mainViewModel: MainViewModelMVVM by viewModels {
+        ViewModelFactory(this)
+    }
+
+    private val mainAdapterMVVM = MainAdapterMVVM()
 
     private val tokenPreferences by lazy { TokenPreferences(this) }
 
@@ -38,32 +43,41 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
+        showLoading(true)
+
+//        Print Token di log
         tokenPreferences.getToken().onEach { token ->
             Log.d("TokenDebug", "Token: $token")
         }.launchIn(lifecycleScope)
 
-//        Inisiasi Adapter NotifyDataChanged
-        mainAdapter.notifyDataSetChanged()
-
 //        Recycler View
         val recyclerView = findViewById<RecyclerView>(R.id.rv_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = mainAdapter
+        recyclerView.adapter = mainAdapterMVVM
 
-//        Observer Live data dari ViewModel
-        mainViewModel.getStoryListLiveData()
-            .observe(this) { stories -> mainAdapter.setList(stories) }
+        mainBinding.rvMain.layoutManager = LinearLayoutManager(this)
 
-//        Fetch Story
+        mainAdapterMVVM.notifyDataSetChanged()
 
-        lifecycleScope.launch {
-            getToken()
+//        Observer buat update Story dari View Model sama Adapter
+        mainViewModel.storyListLiveData.observe(this) { stories ->
+            Log.d("TokenDebug", "Total cerita diterima: ${stories.size}")
+            mainAdapterMVVM.setList(stories)
+            val firstStory = stories.firstOrNull()
+            if (firstStory != null) {
+                val name = firstStory.name
+                mainBinding.textView2.text = name
+            }
         }
 
+        lifecycleScope.launch {
+            val token = getToken()
+            mainViewModel.getStoryFromViewModel(token)
+            showLoading(false)
+        }
 
+//        Logout
         mainBinding.apply {
-
-//            Menghapus Data Sesi dan Token Ketika Button Logout ditekan
             btnLogout.setOnClickListener {
 
                 lifecycleScope.launch {
@@ -78,24 +92,19 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-
 //        Floating Action Button Add
         floatingActionButtonAdd()
 
-
-//        Handler Buat On Item click buat ke Detail
-        mainAdapter.setOnItemClickCallback(object : MainAdapter.OnItemClickCallback {
+//        Handler On Item Click dan pergi ke Detail
+        mainAdapterMVVM.setOnItemClickCallback(object : MainAdapterMVVM.OnItemClickCallback {
             override fun onItemClicked(storyItem: ListStoryItem) {
                 navigateToStoryDetail(storyItem)
             }
         })
+
     }
 
-    //    Open Function untuk Toast Meesage
-    private fun toast(pesan: String) {
-        Toast.makeText(this, pesan, Toast.LENGTH_SHORT).show()
-    }
-
+    //    Fungsi Floating Action Button Add
     private fun floatingActionButtonAdd() {
         mainBinding.apply {
             fabAdd.setOnClickListener {
@@ -104,13 +113,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getToken() {
-        val token = tokenPreferences.getToken().first()
-        mainViewModel.getAllStory(token)
+    private suspend fun getToken(): String {
+        return tokenPreferences.getToken().first()
     }
 
-
-    //    Untuk mengarahkan ke Detail Story
     private fun navigateToStoryDetail(storyItem: ListStoryItem) {
 
         val intent = Intent(this@MainActivity, DetailActivity::class.java).apply {
@@ -123,5 +129,4 @@ class MainActivity : AppCompatActivity() {
     private fun showLoading(state: Boolean) {
         mainBinding.loadingMain.visibility = if (state) View.VISIBLE else View.GONE
     }
-
 }

@@ -69,4 +69,12 @@ interface ApiService {
         @Part image: MultipartBody.Part,
         @Part("description") description: RequestBody
     ): Call<AddResponse>
+
+
+//    Menggunakan MVVM
+
+    @GET("stories")
+    suspend fun getAllStory(
+        @Header("Authorization") token: String,
+    ): Response<StoryResponse>
 }

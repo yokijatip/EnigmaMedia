@@ -1,11 +1,8 @@
 package com.enigma.enigmamedia.adapter
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,9 +11,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.enigma.enigmamedia.R
 import com.enigma.enigmamedia.data.remote.response.ListStoryItem
 import com.enigma.enigmamedia.databinding.ItemMainBinding
-import com.enigma.enigmamedia.view.detail.DetailActivity
 
-class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(StoryDiffCallback()) {
+class MainAdapterMVVM :
+    ListAdapter<ListStoryItem, MainAdapterMVVM.StoryViewHolder>(StoryDiffCallback()) {
 
     private val list = ArrayList<ListStoryItem>()
     private var onItemClickCallback: OnItemClickCallback? = null
@@ -25,7 +22,6 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
         this.onItemClickCallback = onItemClickCallback
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     fun setList(newList: List<ListStoryItem>) {
         list.clear()
@@ -33,9 +29,11 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
         notifyDataSetChanged()
     }
 
-    inner class MainViewHolder(private val binding: ItemMainBinding) :
+    inner class StoryViewHolder(private val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+
+        //        Random Avatar
         private fun getRandomAvatar(): Int {
             val avatarResourceDrawable = arrayOf(
                 R.drawable.avatar1,
@@ -73,8 +71,24 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
                 tvName.text = storyItem.name
             }
         }
-
     }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): StoryViewHolder {
+        val view = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return StoryViewHolder((view))
+    }
+
+    override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
+        holder.bind(list[position])
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
 
     class StoryDiffCallback : DiffUtil.ItemCallback<ListStoryItem>() {
         override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
@@ -86,26 +100,9 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MainViewHolder>(Story
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val view = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MainViewHolder((view))
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-
-
-        holder.bind(list[position])
-
-
-    }
-
-    //    Interface buat on item click listener
     interface OnItemClickCallback {
         fun onItemClicked(storyItem: ListStoryItem)
     }
+
 
 }
