@@ -4,6 +4,7 @@ plugins {
 
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -46,12 +47,17 @@ android {
 
 dependencies {
 
+//    Google Maps
+    implementation("com.google.android.gms:play-services-maps:17.0.0")
+
+
 //    Compress Image
 //    implementation("id.zelory:compressor:3.0.0")
     implementation("id.zelory:compressor:3.0.1")
 
 //    Paging 3
     implementation("androidx.paging:paging-runtime-ktx:3.1.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
 //    Camera X
     val cameraxVersion = "1.2.3"

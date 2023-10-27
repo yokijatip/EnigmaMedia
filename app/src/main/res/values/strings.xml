@@ -9,6 +9,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
 
+    <!--    Api Google Map -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAvGJk5pYpsRue9iGNUsCZCkcDeO4m0QlU</string>
+
     <!--    Landing Screen -->
     <string name="landing_headline">Dicoding Story can be find!</string>
     <string name="landing_description">Enigma Media adalah tugas submission 1 dari kelas Belajar Android Intermediate</string>
@@ -33,4 +36,6 @@
 
     <!--    Foto ga ada-->
     <string name="image_warning">Photo nya mana bang</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_university_map">UniversityMap</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.enigma.enigmamedia.view.detail
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +27,7 @@ class DetailViewModel : ViewModel() {
                 ) {
                     if (response.isSuccessful) {
                         val storyDetail = response.body()?.story
-                        storyDetailLiveData.value = storyDetail
+                        storyDetailLiveData.value = storyDetail!!
                     }
                 }
 

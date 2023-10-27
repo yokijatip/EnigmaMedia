@@ -18,12 +18,15 @@ import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.view.add.AddActivity
 import com.enigma.enigmamedia.view.detail.DetailActivity
 import com.enigma.enigmamedia.view.landing.LandingScreenActivity
+import com.enigma.enigmamedia.view.maps.MapsActivity
+import com.enigma.enigmamedia.view.maps.UniversityMap
 import com.enigma.enigmamedia.viewmodel.main.MainViewModelMVVM
 import com.enigma.enigmamedia.viewmodel.main.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -90,6 +93,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            buttonGoogleMap.setOnClickListener {
+
+                startActivity(Intent(this@MainActivity, MapsActivity::class.java))
+
+            }
+
+            bgMap.setOnClickListener {
+                startActivity(Intent(this@MainActivity, UniversityMap::class.java))
+            }
+
         }
 
 //        Floating Action Button Add
@@ -101,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                 navigateToStoryDetail(storyItem)
             }
         })
+
 
     }
 

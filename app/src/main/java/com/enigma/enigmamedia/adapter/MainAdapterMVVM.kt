@@ -11,6 +11,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.enigma.enigmamedia.R
 import com.enigma.enigmamedia.data.remote.response.ListStoryItem
 import com.enigma.enigmamedia.databinding.ItemMainBinding
+import java.text.ParseException
+import java.text.SimpleDateFormat
+
 
 class MainAdapterMVVM :
     ListAdapter<ListStoryItem, MainAdapterMVVM.StoryViewHolder>(StoryDiffCallback()) {
@@ -46,6 +49,7 @@ class MainAdapterMVVM :
             return avatarResourceDrawable[randomIndex]
         }
 
+        @SuppressLint("SimpleDateFormat")
         fun bind(storyItem: ListStoryItem) {
 
             binding.root.setOnClickListener {
@@ -70,6 +74,23 @@ class MainAdapterMVVM :
                     .into(ivPhoto)
                 tvName.text = storyItem.name
             }
+
+            val date = storyItem.createdAt
+
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val outputFormat = SimpleDateFormat("dd MMMM yyyy")
+
+            try {
+                val responseDate = "$date"
+                val dateFormat = inputFormat.parse(responseDate)
+                val formattedDate = dateFormat?.let { outputFormat.format(it) }
+                binding.tvDate.text = formattedDate
+                println("Tanggal yang sudah diformat: $formattedDate")
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+
+
         }
     }
 
@@ -83,6 +104,8 @@ class MainAdapterMVVM :
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         holder.bind(list[position])
+//        val context = holder.itemView.context
+//        val geocoder = Geocoder(context)
     }
 
     override fun getItemCount(): Int {

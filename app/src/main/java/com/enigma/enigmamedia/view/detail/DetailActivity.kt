@@ -13,6 +13,8 @@ import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.view.main.MainActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.ParseException
+import java.text.SimpleDateFormat
 
 class DetailActivity : AppCompatActivity() {
 
@@ -66,6 +68,21 @@ class DetailActivity : AppCompatActivity() {
                     tvName.text = storyDetail.name
                     tvDate.text = storyDetail.createdAt
                     tvDescription.text = storyDetail.description
+
+                    val date = storyDetail.createdAt
+
+                    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    val outputFormat = SimpleDateFormat("dd MMMM yyyy")
+
+                    try {
+                        val responseDate = "$date"
+                        val dateFormat = inputFormat.parse(responseDate)
+                        val formattedDate = dateFormat?.let { outputFormat.format(it) }
+                        detailBinding.tvDate.text = formattedDate
+                        println("Tanggal yang sudah diformat: $formattedDate")
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
                 }
 
             }
