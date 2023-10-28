@@ -31,13 +31,8 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
-
-    private val mainViewModel: MainViewModelMVVM by viewModels {
-        ViewModelFactory(this)
-    }
-
+    private val mainViewModel: MainViewModelMVVM by viewModels { ViewModelFactory(this) }
     private val mainAdapterMVVM = MainAdapterMVVM()
-
     private val tokenPreferences by lazy { TokenPreferences(this) }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -48,21 +43,16 @@ class MainActivity : AppCompatActivity() {
 
         showLoading(true)
 
-//        Print Token di log
         tokenPreferences.getToken().onEach { token ->
             Log.d("TokenDebug", "Token: $token")
         }.launchIn(lifecycleScope)
 
-//        Recycler View
         val recyclerView = findViewById<RecyclerView>(R.id.rv_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = mainAdapterMVVM
 
-        mainBinding.rvMain.layoutManager = LinearLayoutManager(this)
-
         mainAdapterMVVM.notifyDataSetChanged()
 
-//        Observer buat update Story dari View Model sama Adapter
         mainViewModel.storyListLiveData.observe(this) { stories ->
             Log.d("TokenDebug", "Total cerita diterima: ${stories.size}")
             mainAdapterMVVM.setList(stories)
@@ -79,46 +69,34 @@ class MainActivity : AppCompatActivity() {
             showLoading(false)
         }
 
-//        Logout
         mainBinding.apply {
             btnLogout.setOnClickListener {
-
                 lifecycleScope.launch {
-
                     tokenPreferences.clearToken()
-
                     startActivity(Intent(this@MainActivity, LandingScreenActivity::class.java))
                     finish()
-
                 }
             }
 
             buttonGoogleMap.setOnClickListener {
-
                 startActivity(Intent(this@MainActivity, MapsActivity::class.java))
-
             }
 
             bgMap.setOnClickListener {
                 startActivity(Intent(this@MainActivity, UniversityMap::class.java))
             }
-
         }
 
-//        Floating Action Button Add
         floatingActionButtonAdd()
 
-//        Handler On Item Click dan pergi ke Detail
         mainAdapterMVVM.setOnItemClickCallback(object : MainAdapterMVVM.OnItemClickCallback {
             override fun onItemClicked(storyItem: ListStoryItem) {
                 navigateToStoryDetail(storyItem)
             }
         })
 
-
     }
 
-    //    Fungsi Floating Action Button Add
     private fun floatingActionButtonAdd() {
         mainBinding.apply {
             fabAdd.setOnClickListener {
@@ -132,14 +110,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToStoryDetail(storyItem: ListStoryItem) {
-
         val intent = Intent(this@MainActivity, DetailActivity::class.java).apply {
             putExtra(DetailActivity.EXTRA_ID, storyItem.id)
         }
         startActivity(intent)
     }
 
-    //    Fungsi Show Loading
     private fun showLoading(state: Boolean) {
         mainBinding.loadingMain.visibility = if (state) View.VISIBLE else View.GONE
     }

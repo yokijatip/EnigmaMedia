@@ -34,7 +34,6 @@ class DetailViewModel : ViewModel() {
                 override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
                 }
             })
-
     }
 
     fun getStoryDetailLiveData(): LiveData<Story> {
