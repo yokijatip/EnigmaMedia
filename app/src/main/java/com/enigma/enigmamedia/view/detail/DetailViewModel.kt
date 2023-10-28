@@ -32,6 +32,7 @@ class DetailViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+                    t.message
                 }
             })
     }

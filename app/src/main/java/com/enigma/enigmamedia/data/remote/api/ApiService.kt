@@ -5,6 +5,7 @@ import com.enigma.enigmamedia.data.remote.response.DetailResponse
 import com.enigma.enigmamedia.data.remote.response.LoginResponse
 import com.enigma.enigmamedia.data.remote.response.RegisterResponse
 import com.enigma.enigmamedia.data.remote.response.StoryResponse
+import com.enigma.enigmamedia.data.remote.response.UserLocation
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -40,20 +41,10 @@ interface ApiService {
 
         ): Call<RegisterResponse>
 
-    @GET("stories")
-    fun getStories(
-
-        @Header("Authorization") token: String,
-
-        ): Call<StoryResponse>
-
     @GET("stories/{id}")
     fun getDetail(
-
         @Header("Authorization") token: String,
         @Path("id") id: String,
-        @Query("location") location: Int = 1
-
     ): Call<DetailResponse>
 
     @Multipart
@@ -82,6 +73,7 @@ interface ApiService {
 
     @GET("stories")
     suspend fun getStoriesWithLocation(
-        @Query("location") location: Int = 1,
-    ): StoryResponse
+        @Header("Authorization") token: String,
+        @Query("location") location: Int = 1
+    ): Response<UserLocation>
 }

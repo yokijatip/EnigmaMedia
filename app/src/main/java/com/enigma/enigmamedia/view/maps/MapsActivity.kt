@@ -4,23 +4,29 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.enigma.enigmamedia.R
 import com.enigma.enigmamedia.databinding.ActivityMapsBinding
+import com.enigma.enigmamedia.utils.TokenPreferences
+import com.enigma.enigmamedia.viewmodel.maps.MapsActivityViewModelMVVM
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.flow.first
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var mapsViewModelMVVM: MapsActivityViewModelMVVM
+    private val tokenPreferences by lazy { TokenPreferences(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        mapsViewModelMVVM = ViewModelProvider(this)[MapsActivityViewModelMVVM::class.java]
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -40,9 +46,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        addManyMarker()
     }
+
+    private suspend fun getToken(): String {
+        return tokenPreferences.getToken().first()
+    }
+
+    data class UserLocation(
+        val name: String,
+        val lat: Double,
+        val lon: Double
+    )
+
+    private fun addManyMarker() {
+        val userLocation = listOf(
+            UserLocation("Yoki Jati Perkasa", -6.835903, 107.366366)
+        )
+        userLocation.forEach { location ->
+
+            val latLon = LatLng(location.lat, location.lon)
+            val indonesia = LatLng(-2.4032005, 107.1917352)
+
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLon)
+                    .title(location.name)
+                    .snippet("Slebew")
+            )
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(indonesia))
+        }
+    }
+
 }
