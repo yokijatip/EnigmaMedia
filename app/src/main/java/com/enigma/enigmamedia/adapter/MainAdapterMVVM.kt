@@ -63,6 +63,15 @@ class MainAdapterMVVM :
                 val dateAfterFormatter = DateFormatter().formatter(dateBeforeFormatter)
                 tvDate.text = dateAfterFormatter
 
+                val lat = storyItem.lat
+                val lon = storyItem.lon
+
+
+                val latLon = "$lat" + "$lon"
+
+                tvAddres.text = latLon
+
+
 //                val lat = storyItem.lat
 //                val lon = storyItem.lon
 //

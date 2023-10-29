@@ -1,12 +1,10 @@
 package com.enigma.enigmamedia.view.add
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enigma.enigmamedia.data.remote.client.Client
 import com.enigma.enigmamedia.data.remote.response.AddResponse
-import com.enigma.enigmamedia.data.remote.response.RegisterResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -72,7 +70,7 @@ class AddViewModel : ViewModel() {
         imageFile: File,
         description: String
 
-    ){
+    ) {
         val token = "Bearer $token"
 
         //                Request Body Deskripsi
@@ -84,7 +82,7 @@ class AddViewModel : ViewModel() {
 
         Client.getApiService()
             .addNewStoryNoCoroutine(token, imagePart, reqDescription)
-            .enqueue(object : Callback<AddResponse>{
+            .enqueue(object : Callback<AddResponse> {
                 override fun onResponse(call: Call<AddResponse>, response: Response<AddResponse>) {
                     if (response.isSuccessful) {
                         Log.d("Success", "Upload Berhasil")
@@ -96,11 +94,9 @@ class AddViewModel : ViewModel() {
                 }
 
 
-
             })
 
     }
-
 
 
 }

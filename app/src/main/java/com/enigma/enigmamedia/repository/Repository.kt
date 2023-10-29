@@ -9,4 +9,10 @@ class Repository(private val apiService: ApiService) {
     suspend fun getStoryFromRepository(token: String): Response<StoryResponse> {
         return apiService.getAllStory(token)
     }
+
+
+    suspend fun getStoryLocationFromRepo(token: String): Response<StoryResponse> {
+        return apiService.getAllStoryLocation(token, 1)
+    }
+
 }

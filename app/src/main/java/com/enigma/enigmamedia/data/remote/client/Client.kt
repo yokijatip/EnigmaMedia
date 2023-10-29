@@ -10,7 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class Client {
 
     companion object {
-        fun getApiService(): ApiService {
+        fun getApiService(
+
+        ): ApiService {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             val loggingInterceptor =
                 httpLoggingInterceptor.apply {
