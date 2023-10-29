@@ -5,7 +5,6 @@ import com.enigma.enigmamedia.data.remote.response.DetailResponse
 import com.enigma.enigmamedia.data.remote.response.LoginResponse
 import com.enigma.enigmamedia.data.remote.response.RegisterResponse
 import com.enigma.enigmamedia.data.remote.response.StoryResponse
-import com.enigma.enigmamedia.data.remote.response.UserLocation
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -52,7 +51,8 @@ interface ApiService {
     suspend fun addNewStory(
         @Header("Authorization") token: String,
         @Part image: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Query("location") location: Int = 1
     ): Response<AddResponse>
 
     @Multipart
@@ -68,12 +68,13 @@ interface ApiService {
 
     @GET("stories")
     suspend fun getAllStory(
-        @Header("Authorization") token: String,
+        @Header("Authorization") token: String
     ): Response<StoryResponse>
 
+
     @GET("stories")
-    suspend fun getStoriesWithLocation(
+    suspend fun getAllStoryLocation(
         @Header("Authorization") token: String,
         @Query("location") location: Int = 1
-    ): Response<UserLocation>
+    ): Response<StoryResponse>
 }

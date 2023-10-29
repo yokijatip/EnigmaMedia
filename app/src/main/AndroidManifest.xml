@@ -36,6 +36,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".view.maps.UserLocation"
+            android:exported="false"
+            android:label="@string/title_activity_user_location" />
         <activity
             android:name=".view.maps.UniversityMap"
             android:exported="false"
