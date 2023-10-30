@@ -1,10 +1,11 @@
 package com.enigma.enigmamedia.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -13,9 +14,8 @@ import com.enigma.enigmamedia.databinding.ItemMainBinding
 import com.enigma.enigmamedia.utils.DateFormatter
 import com.enigma.enigmamedia.utils.RandomAvatar
 
-@Suppress("DEPRECATION")
 class MainAdapterMVVM :
-    ListAdapter<ListStoryItem, MainAdapterMVVM.StoryViewHolder>(StoryDiffCallback()) {
+    PagingDataAdapter<ListStoryItem, MainAdapterMVVM.StoryViewHolder>(DIFF_CALLBACK) {
 
     private val list = ArrayList<ListStoryItem>()
     private var onItemClickCallback: OnItemClickCallback? = null
@@ -34,7 +34,7 @@ class MainAdapterMVVM :
     inner class StoryViewHolder(private val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(storyItem: ListStoryItem) {
+        fun bind(context: Context, storyItem: ListStoryItem) {
 
             binding.root.setOnClickListener {
                 onItemClickCallback?.onItemClicked(storyItem)
@@ -70,29 +70,36 @@ class MainAdapterMVVM :
         viewType: Int
     ): StoryViewHolder {
         val view = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return StoryViewHolder((view))
+        return StoryViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
-        holder.bind(list[position])
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-    class StoryDiffCallback : DiffUtil.ItemCallback<ListStoryItem>() {
-        override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
-            return oldItem == newItem
+        val story = getItem(position)
+        if (story != null) {
+            holder.bind(holder.itemView.context, story)
         }
     }
 
     interface OnItemClickCallback {
         fun onItemClicked(storyItem: ListStoryItem)
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 
 

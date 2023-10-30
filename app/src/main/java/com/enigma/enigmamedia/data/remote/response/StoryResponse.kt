@@ -11,7 +11,7 @@ data class StoryResponse(
     val message: String? = null,
 
     @field:SerializedName("listStory")
-    val listStory: List<ListStoryItem> = emptyList()
+    val listStory: List<ListStoryItem>
 )
 
 data class ListStoryItem(

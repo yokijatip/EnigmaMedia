@@ -9,8 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.enigma.enigmamedia.R
 import com.enigma.enigmamedia.adapter.MainAdapterMVVM
 import com.enigma.enigmamedia.data.remote.response.ListStoryItem
 import com.enigma.enigmamedia.databinding.ActivityMainBinding
@@ -41,17 +39,15 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
+        mainBinding.rvMain.layoutManager = LinearLayoutManager(this)
+
         showLoading(true)
+
+        getDataPaging()
 
         tokenPreferences.getToken().onEach { token ->
             Log.d("TokenDebug", "Token: $token")
         }.launchIn(lifecycleScope)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.rv_main)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = mainAdapterMVVM
-
-        mainAdapterMVVM.notifyDataSetChanged()
 
         mainViewModel.storyListLiveData.observe(this) { stories ->
             Log.d("TokenDebug", "Total cerita diterima: ${stories.size}")
@@ -61,12 +57,6 @@ class MainActivity : AppCompatActivity() {
                 val name = firstStory.name
                 mainBinding.textView2.text = name
             }
-        }
-
-        lifecycleScope.launch {
-            val token = getToken()
-            mainViewModel.getStoryFromViewModel(token)
-            showLoading(false)
         }
 
         mainBinding.apply {
@@ -94,7 +84,6 @@ class MainActivity : AppCompatActivity() {
                 navigateToStoryDetail(storyItem)
             }
         })
-
     }
 
     private fun floatingActionButtonAdd() {
@@ -118,5 +107,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLoading(state: Boolean) {
         mainBinding.loadingMain.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    private fun getDataPaging() {
+        val adapter = MainAdapterMVVM()
+        mainBinding.rvMain.adapter = adapter
+        lifecycleScope.launch {
+            val token = getToken()
+            Log.e("TokenDebug2", "Token: $token")
+            mainViewModel.getStoryPagingFromViewModel(token).observe(this@MainActivity) {
+                adapter.submitData(lifecycle, it)
+                showLoading(false)
+                Log.d("TokenDebug", "Data dimuat ke dalam RecyclerView: $it")
+            }
+        }
     }
 }
