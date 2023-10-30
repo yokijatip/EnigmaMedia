@@ -64,6 +64,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             }
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(indonesia, 6f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(indonesia, 4f))
     }
 }

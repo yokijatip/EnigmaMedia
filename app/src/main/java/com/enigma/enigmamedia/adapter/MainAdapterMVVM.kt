@@ -1,7 +1,6 @@
 package com.enigma.enigmamedia.adapter
 
 import android.annotation.SuppressLint
-import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -62,64 +61,9 @@ class MainAdapterMVVM :
                 val dateBeforeFormatter = storyItem.createdAt.toString()
                 val dateAfterFormatter = DateFormatter().formatter(dateBeforeFormatter)
                 tvDate.text = dateAfterFormatter
-
-                val lat = storyItem.lat
-                val lon = storyItem.lon
-
-
-                val latLon = "$lat" + "$lon"
-
-                tvAddres.text = latLon
-
-
-//                val lat = storyItem.lat
-//                val lon = storyItem.lon
-//
-//                val address = getCityAndCountryFromLatLong(lat as Double, lon as Double)
-//
-//                tvAddres.text = address.toString()
-
-
-//
-//                val concatenate = dLat.toString() + dLon.toString()
-//
-////                tvAddres.text = getCityAndCountryFromLatLong(dLat, dLon).toString()
-//
-//                tvAddres.text = concatenate
-
-
-//                btnMap.setOnClickListener {
-//
-//                    val lat = storyItem.lat.toString()
-//                    val lon = storyItem.lon.toString()
-//                    val dLat = lat.toDouble()
-//                    val dLon = lon.toDouble()
-//
-//                    val intent = Intent(itemView.context, UserLocation::class.java)
-//                    intent.putExtra("LATITUDE", dLat)
-//                    intent.putExtra("LONGITUDE", dLon)
-//                    itemView.context.startActivity(intent)
-//                }
-
-
-            }
-
-
-        }
-
-        private fun getCityAndCountryFromLatLong(lat: Double, long: Double): Pair<String, String>? {
-            val geocoder = Geocoder(itemView.context)
-            val addresses = geocoder.getFromLocation(lat, long, 1)
-            return if (addresses!!.isNotEmpty()) {
-                val address = addresses[0]
-                Pair(address.locality, address.countryName)
-            } else {
-                // Jika tidak ada hasil, return null
-                null
             }
         }
     }
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
