@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +14,6 @@ import com.enigma.enigmamedia.databinding.ActivityAddBinding
 import com.enigma.enigmamedia.utils.TokenPreferences
 import com.enigma.enigmamedia.utils.getImageUri
 import com.enigma.enigmamedia.utils.uriToFile
-import com.enigma.enigmamedia.view.landing.SplashScreenActivity
 import com.enigma.enigmamedia.view.main.MainActivity
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.flow.first
@@ -53,12 +51,18 @@ class AddActivity : AppCompatActivity() {
             }
 
             btnUpload.setOnClickListener {
-                lifecycleScope.launch {
-                    uploadToServerNoCoroutine()
-                    val intent = Intent(this@AddActivity, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
+                val description = addBinding.edtDescription.text.toString()
+                if (description.isNotEmpty()) {
+                    lifecycleScope.launch {
+                        uploadToServerNoCoroutine(description)
+                        val intent = Intent(this@AddActivity, MainActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                } else {
+                    showToast("Deksripsi nya gaboleh kosong aduh")
                 }
             }
         }
@@ -103,33 +107,11 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun uploadToServer() {
+    private suspend fun uploadToServerNoCoroutine(description: String) {
         if (currentImageUri != null) {
             val token = getToken()
             val imageFile = uriToFile(currentImageUri!!, this)
-            val description = addBinding.edtDescription.text.toString()
-
-            val compressImage = imageFile?.let { Compressor.compress(this, it) }
-
-            if (compressImage != null) {
-                addViewModel.upload(token, compressImage, description, { message ->
-                    showToast("Upload Berhasil: $message")
-                }, { errorMessage ->
-                    showToast("Upload Gagal: $errorMessage")
-                })
-            }
-        } else {
-            showToast("Pilih Photo")
-        }
-    }
-
-    private suspend fun uploadToServerNoCoroutine(){
-        if(currentImageUri != null) {
-            val token = getToken()
-            val imageFile = uriToFile(currentImageUri!!, this)
-            val description = addBinding.edtDescription.text.toString()
-
-            val compress = imageFile?.let { Compressor.compress(this,it)}
+            val compress = imageFile?.let { Compressor.compress(this, it) }
 
             if (compress != null) {
                 addViewModel.uploadNotCoroutine(token, compress, description)
@@ -141,10 +123,6 @@ class AddActivity : AppCompatActivity() {
 
     private suspend fun getToken(): String {
         return tokenPreferences.getToken().first()
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        addBinding.loadingAdd.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun showToast(message: String) {
