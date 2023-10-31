@@ -38,17 +38,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val token = getToken()
             mapsViewModel.getStoryLocation(token)
         }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         userMarker()
     }
-
     private suspend fun getToken(): String {
         return tokenPreferences.getToken().first()
     }
-
     private fun userMarker() {
         val indonesia = LatLng(-5.9305961, 108.0058252)
 

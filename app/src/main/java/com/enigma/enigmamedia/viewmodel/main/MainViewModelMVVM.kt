@@ -9,16 +9,10 @@ import com.enigma.enigmamedia.di.Injection
 import com.enigma.enigmamedia.repository.Repository
 
 class MainViewModelMVVM(private val repository: Repository) : ViewModel() {
-
     fun getStoryPagingFromViewModel(token: String): LiveData<PagingData<ListStoryItem>> {
         val tokenBearer = "Bearer $token"
         return repository.getStoryPagingSource(tokenBearer).cachedIn(viewModelScope).asLiveData()
     }
-
-    private val _storyListLiveData = MutableLiveData<List<ListStoryItem>>()
-
-    val storyListLiveData: LiveData<List<ListStoryItem>>
-        get() = _storyListLiveData
 }
 
 class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {

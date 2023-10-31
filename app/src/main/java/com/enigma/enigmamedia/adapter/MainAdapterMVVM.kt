@@ -1,9 +1,10 @@
 package com.enigma.enigmamedia.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,23 +14,11 @@ import com.enigma.enigmamedia.data.remote.response.ListStoryItem
 import com.enigma.enigmamedia.databinding.ItemMainBinding
 import com.enigma.enigmamedia.utils.DateFormatter
 import com.enigma.enigmamedia.utils.RandomAvatar
+import com.enigma.enigmamedia.view.detail.DetailActivity
 
 class MainAdapterMVVM :
     PagingDataAdapter<ListStoryItem, MainAdapterMVVM.StoryViewHolder>(DIFF_CALLBACK) {
-
-    private val list = ArrayList<ListStoryItem>()
     private var onItemClickCallback: OnItemClickCallback? = null
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setList(newList: List<ListStoryItem>) {
-        list.clear()
-        list.addAll(newList)
-        notifyDataSetChanged()
-    }
 
     inner class StoryViewHolder(private val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -37,7 +26,9 @@ class MainAdapterMVVM :
         fun bind(context: Context, storyItem: ListStoryItem) {
 
             binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(storyItem)
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("extra_id", storyItem.id)
+                context.startActivity(intent)
             }
 
             val randomAvatar = RandomAvatar().getRandomAvatar()
@@ -61,6 +52,11 @@ class MainAdapterMVVM :
                 val dateBeforeFormatter = storyItem.createdAt.toString()
                 val dateAfterFormatter = DateFormatter().formatter(dateBeforeFormatter)
                 tvDate.text = dateAfterFormatter
+
+                btnMap.setOnClickListener {
+                    Toast.makeText(context, "Fitur Belum Tersedia, Sabar 😛", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
     }
