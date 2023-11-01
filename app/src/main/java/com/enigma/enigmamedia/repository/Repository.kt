@@ -11,12 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class Repository(private val apiService: ApiService) {
-
     suspend fun getStoryLocationFromRepo(token: String): Response<StoryResponse> {
         return apiService.getAllStoryLocation(token, 1)
     }
-
-
     fun getStoryPagingSource(token: String): Flow<PagingData<ListStoryItem>> {
         return Pager(
             config = PagingConfig(

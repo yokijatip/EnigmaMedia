@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +51,10 @@ class AddActivity : AppCompatActivity() {
                 startCamera()
             }
 
+
+
+
+
             btnUpload.setOnClickListener {
                 val description = addBinding.edtDescription.text.toString()
                 if (description.isNotEmpty()) {
@@ -62,7 +67,7 @@ class AddActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    showToast("Deksripsi nya gaboleh kosong aduh")
+                    showToast("Deksripsi nya harus di isi dong")
                 }
             }
         }
@@ -111,6 +116,7 @@ class AddActivity : AppCompatActivity() {
         if (currentImageUri != null) {
             val token = getToken()
             val imageFile = uriToFile(currentImageUri!!, this)
+
             val compress = imageFile?.let { Compressor.compress(this, it) }
 
             if (compress != null) {
@@ -123,6 +129,10 @@ class AddActivity : AppCompatActivity() {
 
     private suspend fun getToken(): String {
         return tokenPreferences.getToken().first()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        addBinding.loadingAdd.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun showToast(message: String) {

@@ -18,7 +18,6 @@ import com.enigma.enigmamedia.view.detail.DetailActivity
 
 class MainAdapterMVVM :
     PagingDataAdapter<ListStoryItem, MainAdapterMVVM.StoryViewHolder>(DIFF_CALLBACK) {
-    private var onItemClickCallback: OnItemClickCallback? = null
 
     inner class StoryViewHolder(private val binding: ItemMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -74,10 +73,6 @@ class MainAdapterMVVM :
         if (story != null) {
             holder.bind(holder.itemView.context, story)
         }
-    }
-
-    interface OnItemClickCallback {
-        fun onItemClicked(storyItem: ListStoryItem)
     }
 
     companion object {

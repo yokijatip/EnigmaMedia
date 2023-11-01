@@ -58,15 +58,6 @@ dependencies {
 //    Paging 3
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-    testImplementation("junit:junit:4.12")
-
-//    Mockito buat Testing
-    val mockito_vesion = "3.12.4"
-    testImplementation("org.mockito:mockito-core:$mockito_vesion")
-    testImplementation("org.mockito:mockito-inline:$mockito_vesion")
-
-//    Special Testing
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
 
 //    Camera X
     val cameraxVersion = "1.2.3"
