@@ -82,8 +82,10 @@
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_upload"
         app:layout_constraintEnd_toEndOf="@+id/btn_camera"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_gallery"
         app:layout_constraintTop_toBottomOf="@+id/btn_gallery"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <com.google.android.material.button.MaterialButton
@@ -104,10 +106,10 @@
         android:id="@+id/loading_add"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/edt_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edt_description"
         android:visibility="gone"
         />
 

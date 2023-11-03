@@ -3,6 +3,7 @@ package com.enigma.enigmamedia.view.add
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -20,6 +21,7 @@ import id.zelory.compressor.Compressor
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class AddActivity : AppCompatActivity() {
 
     private lateinit var addBinding: ActivityAddBinding
@@ -51,24 +53,24 @@ class AddActivity : AppCompatActivity() {
                 startCamera()
             }
 
-
-
-
-
             btnUpload.setOnClickListener {
-                val description = addBinding.edtDescription.text.toString()
-                if (description.isNotEmpty()) {
-                    lifecycleScope.launch {
-                        uploadToServerNoCoroutine(description)
-                        val intent = Intent(this@AddActivity, MainActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                        finish()
+                showLoading(true)
+                Handler().postDelayed({
+                    val description = addBinding.edtDescription.text.toString()
+                    if (description.isNotEmpty()) {
+                        lifecycleScope.launch {
+                            uploadToServerNoCoroutine(description)
+                            val intent = Intent(this@AddActivity, MainActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
+                            showLoading(false)
+                        }
+                    } else {
+                        showToast("Deksripsi nya harus di isi dong")
                     }
-                } else {
-                    showToast("Deksripsi nya harus di isi dong")
-                }
+                }, 6000)
             }
         }
     }
